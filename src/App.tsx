@@ -1,4 +1,4 @@
-import { FilesButton } from './components/buttons';
+import { FilesButton } from './components/files-button';
 import { FilesDropzone } from './components/files-dropzone';
 
 function App() {
