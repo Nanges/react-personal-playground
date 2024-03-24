@@ -2,14 +2,22 @@ import { Reducer, useReducer } from 'react';
 import { FilesButton } from './components/files-button';
 import { FilesDropzone } from './components/files-dropzone';
 
+interface ActionStrategy<T> {
+    reduce(state: T): Partial<T>;
+}
+
+function strategyReducer<T>(state: T, action: ActionStrategy<T>): T {
+    return { ...state, ...action.reduce(state) };
+}
+
+function useStrategyReducer<T>(initialState: T) {
+    return useReducer<Reducer<T, ActionStrategy<T>>>(strategyReducer, initialState);
+}
+
 type State = {
     showMostUsed: boolean;
     search: string;
 };
-
-interface ActionStrategy<T> {
-    reduce(state: T): Partial<T>;
-}
 
 class UpdateShowMostUsed implements ActionStrategy<State> {
     constructor(readonly showMostUsed: boolean = false) {}
@@ -29,14 +37,6 @@ class UpdateSearch implements ActionStrategy<State> {
             search: this.search,
         };
     }
-}
-
-function strategyReducer<T>(state: T, action: ActionStrategy<T>): T {
-    return { ...state, ...action.reduce(state) };
-}
-
-function useStrategyReducer<T>(initialState: T) {
-    return useReducer<Reducer<T, ActionStrategy<T>>>(strategyReducer, initialState);
 }
 
 function App() {
