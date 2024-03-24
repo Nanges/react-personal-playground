@@ -1,32 +1,30 @@
 import { DragEvent, useCallback } from 'react';
-import { FilesButtonProps } from '../props/files-button';
+import { FileListHandler } from '../types/file-list-handler';
 
-const CSS_MODIFIER = 'is-dragging-over';
-const onDragOver = (e: DragEvent) => {
-    (e.target as HTMLElement).classList.add(CSS_MODIFIER);
-    e.preventDefault();
-};
+export const useDragDropHandlers = (filesSelected: FileListHandler, draggingOverCss: string = 'is-dragging-over') => {
+    const onDragOver = useCallback(
+        (e: DragEvent) => {
+            (e.target as HTMLElement).classList.add(draggingOverCss);
+            e.preventDefault();
+        },
+        [draggingOverCss]
+    );
 
-const onDragLeave = (e: DragEvent) => {
-    (e.target as HTMLElement).classList.remove(CSS_MODIFIER);
-};
+    const onDragLeave = useCallback(
+        (e: DragEvent) => {
+            (e.target as HTMLElement).classList.remove(draggingOverCss);
+        },
+        [draggingOverCss]
+    );
 
-export const useDragDropHandlers = ({ accept, multiple, onFilesSelected }: FilesButtonProps) => {
     const onDrop = useCallback(
         (e: DragEvent) => {
-            (e.target as HTMLElement).classList.remove(CSS_MODIFIER);
+            (e.target as HTMLElement).classList.remove(draggingOverCss);
             e.preventDefault();
 
-            if (onFilesSelected) {
-                const formats = accept?.split(',').map((f) => f.trim()) || [];
-                const files = Array.from(e.dataTransfer?.files as FileList).filter((file: File) =>
-                    formats.length ? formats.find((f) => file.name.includes(f)) != null : true
-                );
-
-                if (files.length > 0) onFilesSelected(multiple ? files : files.slice(0, 1));
-            }
+            if (e.dataTransfer?.files) filesSelected(e.dataTransfer.files);
         },
-        [onFilesSelected, accept, multiple]
+        [filesSelected]
     );
 
     return { onDragOver, onDrop, onDragLeave };

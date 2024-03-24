@@ -5,7 +5,7 @@ function App() {
     return (
         <>
             <FilesButton onFilesSelected={console.log}>Select template</FilesButton>
-            <FilesDropzone onFilesSelected={console.log}>
+            <FilesDropzone onFilesSelected={console.log} onFilesDropped={console.log}>
                 Drop template here or <em>select it</em>
             </FilesDropzone>
         </>

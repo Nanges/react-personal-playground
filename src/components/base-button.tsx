@@ -1,6 +1,6 @@
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithRef } from 'react';
 
-export const BaseButton = (props: ComponentPropsWithoutRef<'button'>) => {
+export const BaseButton = (props: ComponentPropsWithRef<'button'>) => {
     let { type, ...remaining } = props;
     type = type ?? 'button';
 

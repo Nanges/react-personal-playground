@@ -1,7 +1,8 @@
-import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithRef } from 'react';
+import { FileListHandler } from '../types/file-list-handler';
 
-export type FilesButtonProps = ComponentPropsWithoutRef<'button'> & {
-    readonly onFilesSelected?: (files: File[]) => void;
+export type FilesButtonProps = ComponentPropsWithRef<'button'> & {
+    readonly onFilesSelected: FileListHandler;
     readonly accept?: string;
     readonly multiple?: boolean;
 };
